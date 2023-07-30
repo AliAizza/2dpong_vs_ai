@@ -6,6 +6,23 @@ let paddlepos2:number = 0;
 let halfpaddle = 3;
 let ballposy:number;
 let ballposx:number;
+let lasthit:number = 1;
+let gamemode:number = 0;
+let blackholesize:number;
+
+
+
+const BlackHole = () => {
+  if (gamemode == 0)
+    blackholesize = 0;
+  else
+    blackholesize = 120;
+    return (
+      <>
+        <img className='BlackHole' src = "../blackhole.svg" alt="black hole" width={`${blackholesize}rem`}/>
+      </>
+    );
+};
 
 const Score = ({ leftScore, rightScore }: { leftScore: number; rightScore: number }) => {
   const leftScoreStyle: React.CSSProperties = {
@@ -96,12 +113,14 @@ const Ball = ({color, setLeftScore, setRightScore, Ballspeed, setBallspeed, setG
         if (newX < -535 / 16 && (newY < paddlepos1 + halfpaddle && newY > paddlepos1 - halfpaddle) ){
           newX = -535 / 16;
           moveAngle.current = Math.PI - moveAngle.current;
-          setBallspeed((prevspeed:number) => prevspeed + 0.3 / 16);
+          setBallspeed((prevspeed:number) => prevspeed + 0.5 / 16);
+          lasthit = 1;
         }
         if (newX > 540 / 16 && (newY < paddlepos2 + halfpaddle && newY > paddlepos2 - halfpaddle) ){
           newX = 540 / 16;
           moveAngle.current = Math.PI - moveAngle.current;
-          setBallspeed((prevspeed:number) => prevspeed + 0.3 / 16);
+          setBallspeed((prevspeed:number) => prevspeed + 0.5 / 16);
+          lasthit = 2;
         }
         // han fin katmarka koraaaaaaaaa
         if ((newX < -575 / 16 || newX > 580 / 16)) {
@@ -132,7 +151,29 @@ const Ball = ({color, setLeftScore, setRightScore, Ballspeed, setBallspeed, setG
         if (newY < -320 / 16 || newY > 325 / 16) {
           newY = newY < -320 / 16 ? -320 / 16 : 325 / 16; 
           moveAngle.current = -moveAngle.current;
-          setBallspeed((prevspeed:number) => prevspeed + 0.3 / 16);
+          setBallspeed((prevspeed:number) => prevspeed + 0.5 / 16);
+        }
+
+        if (newY <= 17 && newY >= 13 && newX >= 23 && newX <= 27 && gamemode == 1) {
+          if (lasthit == 2) {
+            newX = -28;
+            newY = -18;
+          }
+          else {
+            newX = -22;
+            newY = -12;
+          }
+        }
+
+        if (newY >= -17 && newY <= -13 && newX <= -23 && newX >= -27 && gamemode == 1) {
+          if (lasthit == 2) {
+            newX = 22;
+            newY = 12;
+          }
+          else {
+            newX = 28;
+            newY = 18;
+          }
         }
 
         return {x: newX, y: newY};
@@ -249,6 +290,12 @@ function App() {
       <Score leftScore={leftscore / 2} rightScore={rightscore / 2} />
       <div className="lineC">
         <div className="line"></div>
+      </div>
+      <div className='black1'>
+        <BlackHole/>
+      </div>
+      <div className='black2'>
+        <BlackHole/>
       </div>
     </div>
   );
