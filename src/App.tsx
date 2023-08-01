@@ -10,7 +10,9 @@ let lasthit:number = 1;
 let gamemode:number = 0;
 let blackholesize:number;
 
-
+function removeDecimalPart(number: number): number {
+  return Math.floor(number);
+}
 
 const BlackHole = () => {
   if (gamemode == 0)
@@ -287,7 +289,7 @@ function App() {
       <Paddle color="#E15253" pos={`${firstPaddlePos}rem`} />
       <Ball color='white' setLeftScore={setLeftScore} setRightScore={setRightScore} Ballspeed={Ballspeed} setBallspeed={setBallspeed} setGameOver={setGameOver} gameOver={gameOver}/>
       <Paddle color="#5699AF" pos={`${secondPaddlePos}rem`} />
-      <Score leftScore={leftscore / 2} rightScore={rightscore / 2} />
+      <Score leftScore={removeDecimalPart(leftscore / 2)} rightScore={removeDecimalPart(rightscore / 2)} />
       <div className="lineC">
         <div className="line"></div>
       </div>
